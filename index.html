@@ -3,134 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catch the Ball Game</title>
+    <title>Clicker Game</title>
     <style>
         body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            overflow: hidden;
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
         }
-        #gameCanvas {
-            display: block;
-            background-color: #87CEEB;
+        
+        .container {
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .button {
+            padding: 10px 20px;
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-<canvas id="gameCanvas"></canvas>
+    <div class="container">
+        <div class="score">Score: <span id="score">0</span></div>
+        <button class="button" onclick="incrementScore()">Click Me!</button>
+    </div>
 
-<script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    <script>
+        let score = 0;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const basket = {
-        width: 100,
-        height: 20,
-        x: canvas.width / 2 - 50,
-        y: canvas.height - 30,
-        speed: 10,
-        dx: 0
-    };
-
-    const ball = {
-        x: Math.random() * canvas.width,
-        y: 0,
-        radius: 20,
-        dy: 2
-    };
-
-    let score = 0;
-
-    function drawBasket() {
-        ctx.fillStyle = '#FF6347';
-        ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
-    }
-
-    function drawBall() {
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#FFD700';
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    function drawScore() {
-        ctx.font = '20px Arial';
-        ctx.fillStyle = '#000';
-        ctx.fillText(`Score: ${score}`, 10, 30);
-    }
-
-    function moveBasket() {
-        basket.x += basket.dx;
-
-        if (basket.x < 0) {
-            basket.x = 0;
-        }
-
-        if (basket.x + basket.width > canvas.width) {
-            basket.x = canvas.width - basket.width;
-        }
-    }
-
-    function moveBall() {
-        ball.y += ball.dy;
-
-        if (ball.y + ball.radius > canvas.height) {
-            ball.y = 0;
-            ball.x = Math.random() * canvas.width;
-        }
-
-        if (
-            ball.y + ball.radius > basket.y &&
-            ball.x > basket.x &&
-            ball.x < basket.x + basket.width
-        ) {
+        function incrementScore() {
             score++;
-            ball.y = 0;
-            ball.x = Math.random() * canvas.width;
+            document.getElementById('score').textContent = score;
         }
-    }
-
-    function update() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        drawBasket();
-        drawBall();
-        drawScore();
-
-        moveBasket();
-        moveBall();
-
-        requestAnimationFrame(update);
-    }
-
-    function keyDown(e) {
-        if (e.key === 'ArrowRight' || e.key === 'Right') {
-            basket.dx = basket.speed;
-        } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
-            basket.dx = -basket.speed;
-        }
-    }
-
-    function keyUp(e) {
-        if (
-            e.key === 'ArrowRight' ||
-            e.key === 'Right' ||
-            e.key === 'ArrowLeft' ||
-            e.key === 'Left'
-        ) {
-            basket.dx = 0;
-        }
-    }
-
-    document.addEventListener('keydown', keyDown);
-    document.addEventListener('keyup', keyUp);
-
-    update();
-</script>
+    </script>
 </body>
 </html>
